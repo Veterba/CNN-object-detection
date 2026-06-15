@@ -5,11 +5,11 @@ import cv2
 
 class Model(nn.Module):
 
-    def __init__(self, num_classes=20, num_archos=3):
+    def __init__(self, num_classes=9, num_anchors=3):
         super().__init__()
 
         self.pool = nn.MaxPool2d(kernel_size=2)
-        self.head = nn.Conv2d(128, num_classes * (5 + num_archos), kernel_size=1)
+        self.head = nn.Conv2d(128, num_anchors * (5 + num_classes), kernel_size=1)
         
         self.conv1 = nn.Conv2d(3, 32, kernel_size=3, padding=1)
         self.norm1 = nn.BatchNorm2d(32)

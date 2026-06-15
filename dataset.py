@@ -17,7 +17,7 @@ class DetectObjData(Dataset):
         for a in anns:
             x, y, w, h = a["bbox"]
             labels.append(a["category_id"])
-            boxes.append([x, y, x + w, y + h]),
+            boxes.append([x, y, x + w, y + h])
 
         target = {
             "boxes": torch.as_tensor(boxes, dtype=torch.float32).reshape(-1, 4),

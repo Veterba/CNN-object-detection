@@ -22,7 +22,6 @@ def train(dataset, model, epoches):
 
     model = Model(num_classes=9)
     loss_fn = nn.CrossEntropyLoss()
-#    loss_fn = None
     for ep in range(epoches):
         pass
 
@@ -33,4 +32,8 @@ if __name__ == "__main__":
     ])
     data_set = DetectObjData(data_dir=DATASET_ROOT, ann_file=DATASET_ANNFILE, transform=transform)
     target_classes = list(data_set.loadCats().keys())
-    print(target_classes) 
+    img, target = data_set[0]
+    model = Model()
+    out = model(img.unsqueeze(0))
+    print(out.shape) 
+
