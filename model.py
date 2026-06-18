@@ -5,7 +5,7 @@ import cv2
 
 class Model(nn.Module):
 
-    def __init__(self, num_classes=9, num_anchors=3):
+    def __init__(self, num_classes=8, num_anchors=3):
         super().__init__()
 
         self.pool = nn.MaxPool2d(kernel_size=2)

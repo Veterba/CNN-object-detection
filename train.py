@@ -3,8 +3,9 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision import datasets
+import torch.optim as optim
 
-from config import DATASET_ROOT, DATASET_ANNFILE
+from config import DATASET_ROOT, DATASET_ANNFILE, EPOCHES
 
 import numpy as np
 
@@ -17,23 +18,28 @@ def train(dataset, model, epoches):
         transforms.ToTensor(),
     ])
 
-    data_tr = DataLoader(DetectObjData(data_dir=DATASET_ROOT, ann_file=DATASET_ANNFILE, transform=transform), batch_size=16, shuffle=True)
-    data_val = DataLoader(DetectObjData(data_dir=DATASET_ROOT, ann_file=DATASET_ANNFILE, transform=transform), batch_size=16)
+    data_tr = DataLoader(dataset(data_dir=DATASET_ROOT, ann_file=DATASET_ANNFILE, transform=transform), batch_size=16, shuffle=True)
+    data_val = DataLoader(dataset(data_dir=DATASET_ROOT, ann_file=DATASET_ANNFILE, transform=transform), batch_size=16)
 
-    model = Model(num_classes=9)
     loss_fn = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+
     for ep in range(epoches):
-        pass
+        model.train()
+        running_loss = 0.0
+        for images, labels in data_tr:
+            optimizer.zero_grad()
+            outputs = model(images.unsqueeze(0))
+            loss = loss_fn(outputs.mean(dim=[2, 3]), lables['labels'])
+            loss.backward()
+            optimizer.step()
+
+            running_loss += loss.train() * images.size(0)
 
 if __name__ == "__main__":
-    transform = transforms.Compose([
-        transforms.Resize((128, 128)),
-        transforms.ToTensor(),
-    ])
-    data_set = DetectObjData(data_dir=DATASET_ROOT, ann_file=DATASET_ANNFILE, transform=transform)
-    target_classes = list(data_set.loadCats().keys())
-    img, target = data_set[0]
     model = Model()
-    out = model(img.unsqueeze(0))
-    print(out.shape) 
+    epoches = EPOCHES
+    dataset = DetectObjData
+    train = train(dataset, model, epoches)
+    print(train())
 
