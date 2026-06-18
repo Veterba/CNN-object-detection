@@ -3,5 +3,5 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATASET_ROOT = '/Users/veterba/Downloads/Car parts Detection.coco/test/'
-DATASET_ANNFILE = '/Users/veterba/Downloads/Car parts Detection.coco/test/_annotations.coco.json'
+DATASET_ROOT = 'CNN-object-detection/data/test'
+DATASET_ANNFILE = 'CNN-object-detection/data/test/_annotations.coco.json'
