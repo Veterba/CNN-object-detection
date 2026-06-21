@@ -27,3 +27,11 @@ class DetectObjData(Dataset):
 
     def loadCats(self):
         return self.data.coco.cats
+
+def collate_function(batch):
+    images, targets = zip(*batch)
+    images = torch.stack(images, 0)
+    return images, targets
+
+            
+

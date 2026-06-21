@@ -11,6 +11,7 @@ import numpy as np
 
 from model import Model
 from dataset import DetectObjData
+from dataset import collate_function
 
 def train(dataset, model, epoches):
     transform = transforms.Compose([
@@ -18,8 +19,9 @@ def train(dataset, model, epoches):
         transforms.ToTensor(),
     ])
 
-    data_tr = DataLoader(dataset(data_dir=DATASET_ROOT, ann_file=DATASET_ANNFILE, transform=transform), batch_size=16, shuffle=True)
-    data_val = DataLoader(dataset(data_dir=DATASET_ROOT, ann_file=DATASET_ANNFILE, transform=transform), batch_size=16)
+    data_tr = DataLoader(dataset(data_dir=DATASET_ROOT, ann_file=DATASET_ANNFILE, transform=transform), batch_size=16, shuffle=True, collate_fn=collate_function)
+    data_val = DataLoader(dataset(data_dir=DATASET_ROOT, ann_file=DATASET_ANNFILE, transform=transform), batch_size=16, collate_fn=collate_function)
+
 
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
@@ -29,8 +31,8 @@ def train(dataset, model, epoches):
         running_loss = 0.0
         for images, labels in data_tr:
             optimizer.zero_grad()
-            outputs = model(images.unsqueeze(0))
-            loss = loss_fn(outputs.mean(dim=[2, 3]), lables['labels'])
+            outputs = model(images)
+            loss = loss_fn(outputs.mean(dim=[2, 3]), labels['labels'])
             loss.backward()
             optimizer.step()
 
@@ -41,5 +43,5 @@ if __name__ == "__main__":
     epoches = EPOCHES
     dataset = DetectObjData
     train = train(dataset, model, epoches)
-    print(train())
+    print()
 
