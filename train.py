@@ -1,12 +1,9 @@
 import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from torchvision import datasets
 import torch.optim as optim
 
 from config import DATASET_ROOT, DATASET_ANNFILE, EPOCHES
-
-import numpy as np
 
 from model import Model
 from dataset import DetectObjData
@@ -36,7 +33,7 @@ def train(dataset, model, epoches):
 
             running_loss += loss.item() * images.size(0)
 
-        print(f"epoch {ep + 1}/{epoches}  loss {running_loss / len(data_tr.dataset):.4f}")
+        print(f"epoch {ep + 1}/{epoches}  loss {running_loss / len(data_loader.dataset):.4f}")
     torch.save(model.state_dict(), "model.weights.pt")
     
 
