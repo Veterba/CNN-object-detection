@@ -6,7 +6,7 @@ ANCHORS = torch.tensor([[0.20, 0.25], [0.45, 0.50], [0.80, 0.75]])
 
 
 def yolo_loss(preds, targets, num_classes=8, anchors=ANCHORS,
-              lambda_coord=5.0, lambda_noobj=0.5):
+              lambda_coord=5.0, lambda_noobj=0.02):
     """
     preds:   [B, A*(5+num_classes), S, S]  raw head output
     targets: tuple of dicts, each {"boxes": [n,4] xyxy in [0,1], "labels": [n]}

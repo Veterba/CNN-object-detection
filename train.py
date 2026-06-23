@@ -33,7 +33,11 @@ def train(dataset, model, epoches):
 
             running_loss += loss.item() * images.size(0)
 
-        print(f"epoch {ep + 1}/{epoches}  loss {running_loss / len(data_loader.dataset):.4f}")
+        # probe: peak objectness on the last batch — the signal the loss hides.
+        # if this stays near 0 the model is still collapsed regardless of loss.
+        cells = outputs.view(outputs.shape[0], 3, 5 + 8, outputs.shape[2], outputs.shape[3])
+        max_objectness = torch.sigmoid(cells[:, :, 4]).max().item()
+        print(f"epoch {ep + 1}/{epoches}  loss {running_loss / len(data_loader.dataset):.4f}  max_obj {max_objectness:.3f}")
     torch.save(model.state_dict(), "model.weights.pt")
     
 

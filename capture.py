@@ -17,7 +17,7 @@ def load_class_names(ann_file):
 
 class capture:
 
-    def __init__(self, weights="model.weights.pt", conf_threshold=0.5):
+    def __init__(self, weights="model.weights.pt", conf_threshold=0.15):
         self.cap = cv2.VideoCapture(0)
         self.conf_threshold = conf_threshold
         self.class_names = load_class_names(DATASET_ANNFILE)
